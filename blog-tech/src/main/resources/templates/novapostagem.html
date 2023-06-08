@@ -64,36 +64,44 @@
     <form action="/post/cadastrar" method="POST" th:object="${postobj}" id="formpost">
 
       <div class="form-group">
+        <label for="autoria">Autoria</label>
+        <select id="autoria" th:field="*{usuario}" name="autoria" required>
+          <option value="" disabled selected>Selecione o autor</option>
+          <option th:each="autor : ${autores}" th:value="${autor.id}" th:text="${autor.nome}"></option>
+        </select>
+      </div>
+
+      <div class="form-group">
         <label for="titulo">Título da publicação</label>
-        <input type="text" class="form-control" id="titulo" placeholder="">
+        <input type="text" th:field="*{titulo}" class="form-control" id="titulo" placeholder="">
       </div>
 
       <div class="form-group">
         <label for="subtitulo">Subtítulo da publicação</label>
-        <input type="text" class="form-control" id="subtitulo" placeholder="">
+        <input type="text" th:field="*{subtitulo}" class="form-control" id="subtitulo" placeholder="">
       </div>
 
       <div class="form-group">
         <label for="categoria">Selecione a categoria com a qual sua publicação mais se identifica</label>
-        <select class="form-control" id="categoria">
-          <option selected disabled>Escolha a opção</option>
-          <option>Big Data e Análise de Dados</option>
-          <option>Blockchain e criptomoedas</option>
-          <option>Cibersegurança</option>
-          <option>Computação em nuvem</option>
-          <option>DevOps</option>
-          <option>Games e Entretenimento</option>
-          <option>Hardware</option>
-          <option>Internet das Coisas</option>
-          <option>Inteligência Artificial e Machine Learning</option>
-          <option>Programação/desenvolvimento</option>
-          <option>Tecnologias emergentes</option>
+        <select th:field="*{categoria}" class="form-control" id="categoria">
+          <option value="Escolha a opção" selected disabled>Escolha a opção</option>
+          <option value="Big Data e Análise de Dados">Big Data e Análise de Dados</option>
+          <option value="Blockchain e criptomoedas">Blockchain e criptomoedas</option>
+          <option value="Cibersegurança">Cibersegurança</option>
+          <option value="Computação em nuvem">Computação em nuvem</option>
+          <option value="DevOps">DevOps</option>
+          <option value="Games e Entretenimento">Games e Entretenimento</option>
+          <option value="Hardware">Hardware</option>
+          <option value="Internet das Coisas">Internet das Coisas</option>
+          <option value="Inteligência Artificial e Machine Learning">Inteligência Artificial e Machine Learning</option>
+          <option value="Programação/desenvolvimento">Programação/desenvolvimento</option>
+          <option value="Tecnologias emergentes">Tecnologias emergentes</option>
         </select>
       </div>
   
       <div class="form-group">
         <label for="textopublicacao">Escreva aqui o seu texto</label>
-        <textarea class="form-control" id="textopublicacao" rows="8"></textarea>
+        <textarea th:field="*{textoPrincipal}" class="form-control" id="textopublicacao" rows="8"></textarea>
       </div>
 
       <div>

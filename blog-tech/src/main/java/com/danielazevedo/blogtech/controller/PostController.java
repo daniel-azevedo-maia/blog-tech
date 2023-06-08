@@ -17,8 +17,12 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/")
 public class PostController {
+
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private PostService postService;
@@ -27,14 +31,18 @@ public class PostController {
     @GetMapping("/post/novo")
     public ModelAndView novopost() {
         ModelAndView modelAndView = new ModelAndView("/novapostagem");
+
+        modelAndView.addObject("autores", usuarioRepository.findAll());
+
         modelAndView.addObject("postobj", new Post());
+
         return modelAndView;
     }
 
     @PostMapping("/post/cadastrar")
     public ModelAndView cadastrarPost(Post inputPost) {
         postService.cadastrarPost(inputPost);
-        ModelAndView modelAndView = new ModelAndView("/novopost");
+        ModelAndView modelAndView = new ModelAndView("/novapostagem");
         modelAndView.addObject("postobj", new Post());
         return modelAndView;
     }

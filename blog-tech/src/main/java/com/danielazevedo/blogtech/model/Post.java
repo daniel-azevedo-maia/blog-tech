@@ -17,7 +17,6 @@ public class Post implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -32,6 +31,9 @@ public class Post implements Serializable {
 
     @Column(nullable = false)
     private String subtitulo;
+
+    @Column(nullable = false)
+    private String categoria;
 
     @Column(nullable = false)
     private String textoPrincipal;

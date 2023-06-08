@@ -13,11 +13,18 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     // Cadastrar post:
 
     public Post cadastrarPost(Post post) {
 
+        long autorId = post.getUsuario().getId();
+        Usuario autor = usuarioRepository.findById(autorId).orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+        post.setUsuario(autor);
         return postRepository.save(post);
+
     }
 
 }
