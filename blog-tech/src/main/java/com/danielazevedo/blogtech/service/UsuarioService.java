@@ -1,13 +1,11 @@
 package com.danielazevedo.blogtech.service;
 
-import com.danielazevedo.blogtech.controller.dto.UsuarioDTO;
-import com.danielazevedo.blogtech.model.Post;
+import com.danielazevedo.blogtech.dto.UsuarioDTO;
 import com.danielazevedo.blogtech.model.Usuario;
 import com.danielazevedo.blogtech.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UsuarioService {
@@ -23,7 +21,6 @@ public class UsuarioService {
 
         Usuario usuario = new Usuario();
 
-        usuario.setId(usuarioDTO.getId());
         usuario.setNome(usuarioDTO.getNome());
         usuario.setSobrenome(usuarioDTO.getSobrenome());
         usuario.setEmail(usuarioDTO.getEmail());

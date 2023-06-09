@@ -1,7 +1,6 @@
 package com.danielazevedo.blogtech.model;
 
 
-import com.danielazevedo.blogtech.controller.dto.PostDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
@@ -42,7 +42,11 @@ public class Post implements Serializable {
     @Column(name = "textoPrincipal", nullable = false)
     private String textoPrincipal;
 
-    @CreationTimestamp
-    private LocalDateTime dataPublicacao;
+    @Column(name = "data_publicacao")
+    private Timestamp dataPublicacao;
+
+    public void setDataPublicacao(LocalDateTime dataPublicacao) {
+        this.dataPublicacao = Timestamp.valueOf(dataPublicacao);
+    }
 
 }

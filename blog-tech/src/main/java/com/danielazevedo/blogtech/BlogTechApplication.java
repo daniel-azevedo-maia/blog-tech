@@ -20,3 +20,17 @@ public class BlogTechApplication {
 	}
 
 }
+
+/*
+	Utilitário para criptografar:
+
+	public static void main(String[] args) {
+        String senha = "admin"; // Senha que deseja criptografar
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String senhaCriptografada = passwordEncoder.encode(senha);
+
+        System.out.println("Senha original: " + senha);
+        System.out.println("Senha criptografada: " + senhaCriptografada);
+    }
+* */

@@ -1,4 +1,4 @@
-package com.danielazevedo.blogtech.controller.dto;
+package com.danielazevedo.blogtech.dto;
 
 import com.danielazevedo.blogtech.model.Usuario;
 import lombok.Data;

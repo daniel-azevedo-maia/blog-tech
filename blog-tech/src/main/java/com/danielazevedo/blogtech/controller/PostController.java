@@ -1,7 +1,6 @@
 package com.danielazevedo.blogtech.controller;
 
-import com.danielazevedo.blogtech.controller.dto.PostDTO;
-import com.danielazevedo.blogtech.model.Post;
+import com.danielazevedo.blogtech.dto.PostDTO;
 import com.danielazevedo.blogtech.repository.PostRepository;
 import com.danielazevedo.blogtech.repository.UsuarioRepository;
 import com.danielazevedo.blogtech.service.PostService;

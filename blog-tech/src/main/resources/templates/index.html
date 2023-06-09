@@ -65,7 +65,30 @@
   <!--Criar os controllers/repository/service para postagens-->
   <a href="/post/novo">Nova publicação</a>
 
-  <p>POSTAGENS...</p>
+  <div class="container mt-5">
+    <h2>Postagens Recentes</h2>
+
+    <!-- LISTA DE POSTAGENS -->
+    <ul class="list-group">
+
+        <!-- Cada item da lista representa uma postagem -->
+        <li th:each="post : ${postagens}" class="list-group-item">
+            <div class="media">
+                <img src="path/to/image" class="mr-3 align-self-start rounded" alt="...">
+                <div class="media-body">
+                    <h5 th:text="${post.titulo}" class="mt-0"></h5>
+                    Resumo da postagem... <a href="link/to/post">Leia mais</a>
+                    <div class="mt-2">
+                        <small th:text="'Publicado em: ' + ${post.dataPublicacao}" class="text-muted"></small>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <!-- Repita o código acima para cada postagem -->
+    </ul>
+</div>
+
 
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
