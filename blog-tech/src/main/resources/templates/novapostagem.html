@@ -65,7 +65,7 @@
 
       <div class="form-group">
         <label for="autoria">Autoria</label>
-        <select id="autoria" th:field="*{usuario}" name="autoria" required>
+        <select id="autoria" th:field="*{usuarioId}" name="autoria" required>
           <option value="" disabled selected>Selecione o autor</option>
           <option th:each="autor : ${autores}" th:value="${autor.id}" th:text="${autor.nome}"></option>
         </select>
@@ -84,7 +84,7 @@
       <div class="form-group">
         <label for="categoria">Selecione a categoria com a qual sua publicação mais se identifica</label>
         <select th:field="*{categoria}" class="form-control" id="categoria">
-          <option value="Escolha a opção" selected disabled>Escolha a opção</option>
+          <option value="" selected>Escolha a opção</option>
           <option value="Big Data e Análise de Dados">Big Data e Análise de Dados</option>
           <option value="Blockchain e criptomoedas">Blockchain e criptomoedas</option>
           <option value="Cibersegurança">Cibersegurança</option>

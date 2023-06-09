@@ -1,15 +1,14 @@
 package com.danielazevedo.blogtech.controller;
 
+import com.danielazevedo.blogtech.controller.dto.PostDTO;
 import com.danielazevedo.blogtech.model.Post;
-import com.danielazevedo.blogtech.model.Usuario;
 import com.danielazevedo.blogtech.repository.PostRepository;
 import com.danielazevedo.blogtech.repository.UsuarioRepository;
 import com.danielazevedo.blogtech.service.PostService;
-import com.danielazevedo.blogtech.service.UsuarioService;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,16 +33,17 @@ public class PostController {
 
         modelAndView.addObject("autores", usuarioRepository.findAll());
 
-        modelAndView.addObject("postobj", new Post());
+        modelAndView.addObject("postobj", new PostDTO());
 
         return modelAndView;
     }
 
+    // Enviando os dados para persistência no banco de dados:
     @PostMapping("/post/cadastrar")
-    public ModelAndView cadastrarPost(Post inputPost) {
-        postService.cadastrarPost(inputPost);
+    public ModelAndView cadastrarPost(@ModelAttribute PostDTO postDTO) {
+        postService.cadastrarPost(postDTO);
         ModelAndView modelAndView = new ModelAndView("/novapostagem");
-        modelAndView.addObject("postobj", new Post());
+        modelAndView.addObject("postobj", new PostDTO());
         return modelAndView;
     }
 

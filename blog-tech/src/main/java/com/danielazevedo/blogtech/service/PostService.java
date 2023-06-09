@@ -1,11 +1,14 @@
 package com.danielazevedo.blogtech.service;
 
+import com.danielazevedo.blogtech.controller.dto.PostDTO;
 import com.danielazevedo.blogtech.model.Post;
 import com.danielazevedo.blogtech.model.Usuario;
 import com.danielazevedo.blogtech.repository.PostRepository;
 import com.danielazevedo.blogtech.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class PostService {
@@ -16,13 +19,24 @@ public class PostService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    // Cadastrar post:
+    // Cadastrar publicação:
 
-    public Post cadastrarPost(Post post) {
+    public Post cadastrarPost(PostDTO postDTO) {
 
-        long autorId = post.getUsuario().getId();
+        long autorId = postDTO.getUsuarioId();
+
         Usuario autor = usuarioRepository.findById(autorId).orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+
+        // Criar um POST a partir do DTO:
+        Post post = new Post();
+        post.setId(postDTO.getId());
         post.setUsuario(autor);
+        post.setTitulo(postDTO.getTitulo());
+        post.setSubtitulo(postDTO.getSubtitulo());
+        post.setCategoria(postDTO.getCategoria());
+        post.setTextoPrincipal(postDTO.getTextoPrincipal());
+        post.setDataPublicacao(LocalDateTime.now());
+
         return postRepository.save(post);
 
     }

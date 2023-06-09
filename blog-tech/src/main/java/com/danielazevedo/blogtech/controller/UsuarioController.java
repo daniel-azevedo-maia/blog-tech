@@ -1,5 +1,6 @@
 package com.danielazevedo.blogtech.controller;
 
+import com.danielazevedo.blogtech.controller.dto.UsuarioDTO;
 import com.danielazevedo.blogtech.model.Usuario;
 import com.danielazevedo.blogtech.repository.UsuarioRepository;
 import com.danielazevedo.blogtech.service.UsuarioService;
@@ -24,15 +25,15 @@ public class UsuarioController {
     @GetMapping("/usuario/novo")
     public ModelAndView novousuario() {
         ModelAndView modelAndView = new ModelAndView("/novousuario");
-        modelAndView.addObject("usuarioobj", new Usuario());
+        modelAndView.addObject("usuarioobj", new UsuarioDTO());
         return modelAndView;
     }
 
     @PostMapping("/usuario/cadastrar")
-    public ModelAndView cadastrarUsuario(Usuario inputUsuario) {
-        usuarioService.cadastrarUsuario(inputUsuario);
+    public ModelAndView cadastrarUsuario(UsuarioDTO usuarioDTO) {
+        usuarioService.cadastrarUsuario(usuarioDTO);
         ModelAndView modelAndView = new ModelAndView("/novousuario");
-        modelAndView.addObject("usuarioobj", new Usuario());
+        modelAndView.addObject("usuarioobj", new UsuarioDTO());
         return modelAndView;
     }
 
