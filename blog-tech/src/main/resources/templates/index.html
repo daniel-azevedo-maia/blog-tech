@@ -60,7 +60,12 @@
 
   <!------------------------CORPO DA PÁGINA------------------------>
 
-  É novo por aqui? <a href="/usuario/novo">Cadastre-se!</a><br>
+  <div th:if="${usuarioobj != null}">
+      <p>Seja bem vindo(a), <span th:text="${usuarioobj.nome}"></span></p>
+  </div>
+  <div th:unless="${usuarioobj != null}">
+      <p>Usuário não encontrado! <a href="/usuario/novo">Cadastre-se!</a><br></p>
+  </div>
 
   <!--Criar os controllers/repository/service para postagens-->
   <a href="/post/novo">Nova publicação</a> <br>

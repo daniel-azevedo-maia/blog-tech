@@ -1,14 +1,11 @@
-package com.danielazevedo.blogtech.dto;
+package com.danielazevedo.blogtech.dto.request;
 
 import com.danielazevedo.blogtech.model.Usuario;
 import lombok.Data;
 
-import javax.persistence.Column;
-
 @Data
-public class UsuarioDTO {
+public class UsuarioRequestDTO {
 
-    private Long id;
     private String nome;
     private String sobrenome;
     private String email;

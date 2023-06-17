@@ -25,6 +25,7 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
                 .disable() // Desativa proteção CSRF
                 .authorizeRequests() // Habilita a restrição de acessos
                 .antMatchers(HttpMethod.GET, "/").permitAll() // Libera acesso à página inicial
+                .antMatchers(HttpMethod.GET, "/usuario/novo").permitAll() // Libera acesso à página de novo usuário
                 .antMatchers(HttpMethod.GET, "/novapostagem").hasAnyRole("ADMIN") // Restringe "/novapostagem" a ADMIN
                 .anyRequest().authenticated() // Todos outros pedidos necessitam autenticação
                 .and().formLogin().permitAll() // Permite a qualquer usuário usar o formulário de login

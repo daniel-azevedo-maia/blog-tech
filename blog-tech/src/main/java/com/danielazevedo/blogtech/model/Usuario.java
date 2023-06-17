@@ -1,5 +1,6 @@
 package com.danielazevedo.blogtech.model;
 
+import com.danielazevedo.blogtech.dto.request.UsuarioRequestDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,15 @@ import java.util.List;
 public class Usuario implements Serializable, UserDetails {
 
     private static final long serialVersionUID = 1L;
+
+    // Conversão do DTO:
+    public Usuario(UsuarioRequestDTO usuarioRequestDTO) {
+        this.nome = usuarioRequestDTO.getNome();
+        this.sobrenome = usuarioRequestDTO.getSobrenome();
+        this.email = usuarioRequestDTO.getEmail();
+        this.login = usuarioRequestDTO.getLogin();
+        this.senha = usuarioRequestDTO.getSenha();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -88,4 +98,6 @@ public class Usuario implements Serializable, UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

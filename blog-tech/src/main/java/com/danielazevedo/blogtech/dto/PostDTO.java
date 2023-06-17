@@ -1,9 +1,6 @@
 package com.danielazevedo.blogtech.dto;
 
-import com.danielazevedo.blogtech.model.Usuario;
 import lombok.Data;
-
-import java.time.LocalDateTime;
 
 @Data
 public class PostDTO {
