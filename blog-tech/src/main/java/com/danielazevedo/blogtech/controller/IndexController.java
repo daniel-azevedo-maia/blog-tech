@@ -11,7 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/")
 public class IndexController {
-
     @Autowired
     private PostRepository postRepository;
 
