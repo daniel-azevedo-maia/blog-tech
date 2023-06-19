@@ -28,10 +28,9 @@ public class PostController {
     // Cadastrar novo post:
     @GetMapping("/post/novo")
     public ModelAndView novopost() {
+
         ModelAndView modelAndView = new ModelAndView("/novapostagem");
-
         modelAndView.addObject("autores", usuarioRepository.findAll());
-
         modelAndView.addObject("postobj", new PostDTO());
 
         return modelAndView;
@@ -40,9 +39,11 @@ public class PostController {
     // Enviando os dados para persistência no banco de dados:
     @PostMapping("/post/cadastrar")
     public ModelAndView cadastrarPost(@ModelAttribute PostDTO postDTO) {
+
         postService.cadastrarPost(postDTO);
         ModelAndView modelAndView = new ModelAndView("/novapostagem");
         modelAndView.addObject("postobj", new PostDTO());
+
         return modelAndView;
     }
 

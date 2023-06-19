@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,9 +32,10 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/", true) // URL de sucesso após login
                 .failureUrl("/login?error=true") // URL em caso de falha no login
                 .and()
-                .logout().logoutSuccessUrl("/login") // URL após o logout
-                // Define o URL de logout e invalida o usuário autenticado
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+                .logout()
+                .logoutSuccessUrl("/login") // Redireciona para a página de login após o logout
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutUrl("/logout");
     }
 
     /*
@@ -96,9 +96,13 @@ protected void configure(HttpSecurity http) throws Exception {
                 .passwordEncoder(new BCryptPasswordEncoder());
     }
 
-
+/*
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/materialize/**");
+        web.ignoring().antMatchers("/materialize/**")
+                .antMatchers(HttpMethod.GET,"/resources/**","/static/**", "/**");
+
     }
+
+ */
 }

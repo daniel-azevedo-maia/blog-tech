@@ -64,13 +64,12 @@
       <p>Seja bem vindo(a), <span th:text="${usuarioobj.nome}"></span></p>
   </div>
   <div th:unless="${usuarioobj != null}">
-      <p>Usuário não encontrado! <a href="/usuario/novo">Cadastre-se!</a><br></p>
+      <p>Você não está logado ou usário não existe. <a th:href="@{/usuario/novo}">Cadastre-se!</a><br></p>
   </div>
 
-  <!--Criar os controllers/repository/service para postagens-->
-  <a href="/post/novo">Nova publicação</a> <br>
+  <a th:href="@{/post/novo}">Nova publicação</a> <br>
 
-  <a href="/logout">Sair</a>
+  <a th:href="@{/logout}">Sair</a>
 
   <div class="container mt-5">
     <h2>Postagens Recentes</h2>
