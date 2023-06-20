@@ -60,16 +60,13 @@
 
   <!------------------------CORPO DA PÁGINA------------------------>
 
-  <div th:if="${usuarioobj != null}">
-      <p>Seja bem vindo(a), <span th:text="${usuarioobj.nome}"></span></p>
-  </div>
-  <div th:unless="${usuarioobj != null}">
-      <p>Você não está logado ou usário não existe. <a th:href="@{/usuario/novo}">Cadastre-se!</a><br></p>
-  </div>
+  <p th:if="${autenticado}">Seja bem vindo, <span th:text="${nome}"></span>!</p>
+
+  <p th:unless="${autenticado}">Faça login para entrar! <a th:href="@{/login}">Clique aqui!</a></p>
 
   <a th:href="@{/post/novo}">Nova publicação</a> <br>
 
-  <a th:href="@{/logout}">Sair</a>
+  <a th:href="@{/logout}">Encerrar sessão</a>
 
   <div class="container mt-5">
     <h2>Postagens Recentes</h2>

@@ -24,6 +24,8 @@ public class BlogTechApplication implements WebMvcConfigurer {
 		SpringApplication.run(BlogTechApplication.class, args);
 	}
 
+	// Estamos habilitando um configurador, dizendo q ele vai interceptar o login
+	// e mandar pra nossa tela de login.
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/login").setViewName("/login");

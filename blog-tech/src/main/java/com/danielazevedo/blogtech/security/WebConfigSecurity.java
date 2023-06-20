@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,21 +22,21 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf()
-                .disable() // Desativa proteção CSRF
-                .authorizeRequests() // Habilita a restrição de acessos
-                .antMatchers(HttpMethod.GET, "/").permitAll() // Libera acesso à página inicial
-                .antMatchers(HttpMethod.GET, "/usuario/novo").permitAll() // Libera acesso à página de novo usuário
-                .antMatchers(HttpMethod.GET, "/novapostagem").hasAnyRole("ADMIN") // Restringe "/novapostagem" a ADMIN
-                .anyRequest().authenticated() // Todos outros pedidos necessitam autenticação
-                .and().formLogin().permitAll() // Permite a qualquer usuário usar o formulário de login
-                .loginPage("/login") // Define a página de login
-                .defaultSuccessUrl("/", true) // URL de sucesso após login
-                .failureUrl("/login?error=true") // URL em caso de falha no login
+                .disable()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/").permitAll()
+                .antMatchers(HttpMethod.GET, "/usuario/novo").permitAll()
+                .antMatchers(HttpMethod.GET, "/novapostagem").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .anyRequest().authenticated()
+                .and().formLogin().permitAll()
+                .loginPage("/login")
+                .defaultSuccessUrl("/", true)
+                .failureUrl("/login?error=true")
                 .and()
-                .logout()
-                .logoutSuccessUrl("/login") // Redireciona para a página de login após o logout
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutUrl("/logout");
+                .logout().logoutSuccessUrl("/login")
+                // Mapeia URL de Logout e invalida usuário autenticado
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
     }
 
     /*
@@ -96,13 +97,12 @@ protected void configure(HttpSecurity http) throws Exception {
                 .passwordEncoder(new BCryptPasswordEncoder());
     }
 
-/*
+
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/materialize/**")
-                .antMatchers(HttpMethod.GET,"/resources/**","/static/**", "/**");
-
+        web.ignoring().antMatchers(
+                "/**/favicon.ico"
+        );
     }
 
- */
 }

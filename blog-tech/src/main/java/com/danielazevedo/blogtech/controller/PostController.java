@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/post")
 public class PostController {
 
     @Autowired
@@ -26,7 +26,7 @@ public class PostController {
     private PostService postService;
 
     // Cadastrar novo post:
-    @GetMapping("/post/novo")
+    @GetMapping("/novo")
     public ModelAndView novopost() {
 
         ModelAndView modelAndView = new ModelAndView("/novapostagem");
@@ -37,7 +37,7 @@ public class PostController {
     }
 
     // Enviando os dados para persistência no banco de dados:
-    @PostMapping("/post/cadastrar")
+    @PostMapping("/cadastrar")
     public ModelAndView cadastrarPost(@ModelAttribute PostDTO postDTO) {
 
         postService.cadastrarPost(postDTO);

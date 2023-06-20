@@ -69,7 +69,8 @@
 
 </nav>
 
-<form action="@{/login}" action method="POST">
+<form th:action="@{/login}" method="POST">
+
 
     <div class="form-group">
         <label for="username">Login</label>
@@ -80,10 +81,10 @@
         <input type="password" class="form-control" id="password" name="password" placeholder="Informe sua senha">
     </div>
     <input type="submit" class="btn btn-primary" value="Entrar">
-
-    <h4 th:text="${error}"></h4>
+    <a class="btn btn-primary" th:href="@{/}">Retornar à página principal</a>
 
 </form>
+
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
