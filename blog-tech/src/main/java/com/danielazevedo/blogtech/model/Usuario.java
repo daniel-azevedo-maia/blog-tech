@@ -29,6 +29,7 @@ public class Usuario implements Serializable, UserDetails {
         this.email = usuarioRequestDTO.getEmail();
         this.login = usuarioRequestDTO.getLogin();
         this.senha = usuarioRequestDTO.getSenha();
+        this.endereco = usuarioRequestDTO.getEndereco();
     }
 
     @Id
@@ -44,6 +45,12 @@ public class Usuario implements Serializable, UserDetails {
 
     @Column(nullable = false)
     private String email;
+
+    @Embedded
+    // Deletando um objeto Usuario, todos os endereços serão deletados em cascata.
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "endereco_id", referencedColumnName = "id")
+    private Endereco endereco;
 
     @Column(nullable = false)
     private String login;

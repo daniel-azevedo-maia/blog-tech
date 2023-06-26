@@ -34,8 +34,9 @@ public class UsuarioController {
     @PostMapping("/cadastrar")
     public ModelAndView cadastrarUsuario(@ModelAttribute UsuarioRequestDTO usuarioRequestDTO) {
         Usuario usuario = usuarioService.cadastrarUsuario(usuarioRequestDTO);
-        ModelAndView modelAndView = new ModelAndView("/index");
-        modelAndView.addObject("usuarioobj", usuario);
+        ModelAndView modelAndView = new ModelAndView("login");
+        modelAndView.addObject("usuarioCadastrado", usuario.getNome());
+//        System.out.println("Cadastrada a pessoa " + usuario.getNome());
         return modelAndView;
     }
 

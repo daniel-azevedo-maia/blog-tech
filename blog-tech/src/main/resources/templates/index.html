@@ -8,7 +8,7 @@
 
 </head>
 <body>
-  
+
   <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
 
     <!--Cria menu hamburguer na responsividade-->
@@ -21,7 +21,7 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
 
       <a class="navbar-brand" href="#">BLOG TECH</a>
-      
+
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
         <li class="nav-item active">
@@ -62,11 +62,13 @@
 
   <p th:if="${autenticado}">Seja bem vindo, <span th:text="${nome}"></span>!</p>
 
-  <p th:unless="${autenticado}">Faça login para entrar! <a th:href="@{/login}">Clique aqui!</a></p>
+  <p th:unless="${autenticado}">Faça <a th:href="@{/login}">login</a> para entrar ou <a th:href="@{/usuario/novo}">cadastre-se!</a>
+
+  </p>
 
   <a th:href="@{/post/novo}">Nova publicação</a> <br>
 
-  <a th:href="@{/logout}">Encerrar sessão</a>
+  <a th:if="${autenticado}" th:href="@{/logout}">Encerrar sessão</a>
 
   <div class="container mt-5">
     <h2>Postagens Recentes</h2>

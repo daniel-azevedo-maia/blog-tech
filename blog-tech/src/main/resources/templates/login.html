@@ -71,6 +71,12 @@
 
 <form th:action="@{/login}" method="POST">
 
+    <div th:if="${usuarioCadastrado != null}">
+        <p th:text="'Está quase lá, ' + ${usuarioCadastrado} + '! Agora, você só precisa fazer o login.'"></p>
+    </div>
+    <div th:unless="${usuarioCadastrado != null}">
+        <p>Cadastre-se ou faça login.</p>
+    </div>
 
     <div class="form-group">
         <label for="username">Login</label>
@@ -80,8 +86,14 @@
         <label for="password">Senha</label>
         <input type="password" class="form-control" id="password" name="password" placeholder="Informe sua senha">
     </div>
+
+    <div th:if="${param.error}" class="alert alert-danger" role="alert">
+        Login e/ou senha inválido(s)!
+    </div>
+
     <input type="submit" class="btn btn-primary" value="Entrar">
     <a class="btn btn-primary" th:href="@{/}">Retornar à página principal</a>
+    <a class="btn btn-success" th:href="@{/usuario/novo}">Cadastrar novo usuário</a>
 
 </form>
 
