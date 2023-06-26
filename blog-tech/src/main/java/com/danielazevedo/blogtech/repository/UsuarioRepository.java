@@ -18,4 +18,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     @Query("SELECT u.nome FROM Usuario u WHERE u.login = ?1")
     String nomeUser(String login);
 
+    boolean existsByLogin(String login);
+
 }

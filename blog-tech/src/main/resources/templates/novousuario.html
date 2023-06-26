@@ -141,6 +141,10 @@
         <input type="password" class="form-control" id="confirmarSenha" placeholder="Confirme a senha" required>
     </div>
 
+    <div th:if="${loginExistente}" class="alert alert-danger">
+       <p th:text="${loginExistente}"></p>
+    </div>
+
     <div class="form-group mt-4">
         <input type="submit" class="btn btn-success" value="Cadastrar novo usuário">
         <a href="/" class="btn btn-primary">Voltar</a>

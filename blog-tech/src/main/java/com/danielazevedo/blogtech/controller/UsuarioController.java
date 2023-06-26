@@ -33,7 +33,20 @@ public class UsuarioController {
 
     @PostMapping("/cadastrar")
     public ModelAndView cadastrarUsuario(@ModelAttribute UsuarioRequestDTO usuarioRequestDTO) {
+
+        // Verifica se já existe um usuário cadastrado com este login.
+        if(usuarioService.verificarExistenciaLogin(usuarioRequestDTO.getLogin())) {
+            ModelAndView modelAndView = new ModelAndView("/novousuario");
+            modelAndView.addObject("usuarioobj", new UsuarioRequestDTO());
+            modelAndView.addObject("loginExistente", "Este login já existe! Informe outro.");
+            return modelAndView;
+        }
+
         Usuario usuario = usuarioService.cadastrarUsuario(usuarioRequestDTO);
+
+        System.out.println("Cadastrado o usuário " + usuario.getNome() +
+                " com o seguintes papeis: " + usuario.getRoles().toString());
+
         ModelAndView modelAndView = new ModelAndView("login");
         modelAndView.addObject("usuarioCadastrado", usuario.getNome());
 //        System.out.println("Cadastrada a pessoa " + usuario.getNome());
