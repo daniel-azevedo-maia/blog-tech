@@ -61,15 +61,20 @@ public class Usuario implements Serializable, UserDetails {
     @OneToMany(mappedBy = "usuario")
     private List<Post> postagens = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "usuarios_role",
-            joinColumns = @JoinColumn(name = "usuario_id",
-                    referencedColumnName = "id",
-                    table = "Usuario"), // cria tabela de acesso do usuario
-
-            inverseJoinColumns = @JoinColumn(name = "role_id",
-                    referencedColumnName = "id", table = "role"))
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "usuarios_role", // tabela de ligação
+            joinColumns = @JoinColumn(
+                    name = "usuario_id", // coluna da tabela de ligação referente à tabela "usuario"
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", // coluna da tabela de ligação referente à tabela "role"
+                    referencedColumnName = "id"
+            )
+    )
     private List<Role> roles = new ArrayList<>();
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

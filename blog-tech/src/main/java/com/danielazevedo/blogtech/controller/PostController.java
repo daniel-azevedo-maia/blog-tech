@@ -46,11 +46,9 @@ public class PostController {
     // Enviando os dados para persistência no banco de dados:
     @PostMapping("/cadastrar")
     public ModelAndView cadastrarPost(@ModelAttribute PostDTO postDTO) {
-
         postService.cadastrarPost(postDTO);
-        ModelAndView modelAndView = new ModelAndView("/novapostagem");
+        ModelAndView modelAndView = new ModelAndView("redirect:/");
         modelAndView.addObject("postobj", new PostDTO());
-
         return modelAndView;
     }
 

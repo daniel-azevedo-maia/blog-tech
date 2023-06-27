@@ -6,6 +6,84 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+    <style>
+      /* Estilo individual para a página */
+      body {
+          background-color: #f5f5f5;
+      }
+
+      .container {
+          margin-top: 50px;
+      }
+
+      .media {
+          margin-bottom: 20px;
+      }
+
+      .media-body {
+          padding-left: 20px;
+      }
+
+      .list-group {
+          padding: 0;
+      }
+
+      .list-group-item {
+          border-radius: 10px;
+          margin-bottom: 10px;
+          background-color: #ffffff;
+          border: 1px solid #e9e9e9;
+      }
+
+      .list-group-item img {
+          width: 100px;
+          height: auto;
+          border-radius: 5px;
+      }
+
+      .list-group-item h5 {
+          color: #000000;
+      }
+
+      .list-group-item a {
+          color: #4286f4;
+      }
+
+      .text-muted {
+          font-size: 12px;
+      }
+
+      .welcome-text {
+          text-align: center;
+          margin-top: 20px;
+          margin-bottom: 30px;
+          font-weight: bold;
+      }
+
+      .welcome-link {
+          text-align: center;
+          margin-bottom: 30px;
+      }
+
+      .welcome-link a {
+          color: #4286f4;
+      }
+
+      .new-post {
+          text-align: center;
+          margin-bottom: 30px;
+      }
+
+      .logout {
+          text-align: center;
+          margin-bottom: 30px;
+      }
+
+      .logout a {
+          color: #4286f4;
+      }
+  </style>
+
 </head>
 <body>
 
@@ -25,7 +103,7 @@
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
         <li class="nav-item active">
-          <a class="nav-link" href="#">Página inicial <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="/">Página inicial <span class="sr-only">(current)</span></a>
         </li>
 
         <li class="nav-item">
@@ -60,18 +138,20 @@
 
   <!------------------------CORPO DA PÁGINA------------------------>
 
-  <p th:if="${autenticado}">Seja bem vindo, <span th:text="${nome}"></span>!</p>
+  <p th:if="${autenticado}" class="welcome-text">Seja bem-vindo, <span th:text="${nome}"></span>!</p>
 
-  <p th:unless="${autenticado}">Faça <a th:href="@{/login}">login</a> para entrar ou <a th:href="@{/usuario/novo}">cadastre-se!</a>
+  <p th:unless="${autenticado}" class="welcome-text">Faça <a th:href="@{/login}">login</a> para entrar ou <a th:href="@{/usuario/novo}">cadastre-se!</a></p>
 
-  </p>
+  <div class="welcome-link">
+    <a th:href="@{/post/novo}">Nova publicação</a>
+  </div>
 
-  <a th:href="@{/post/novo}">Nova publicação</a> <br>
+  <div class="logout" th:if="${autenticado}">
+    <a th:href="@{/logout}">Encerrar sessão</a>
+  </div>
 
-  <a th:if="${autenticado}" th:href="@{/logout}">Encerrar sessão</a>
-
-  <div class="container mt-5">
-    <h2>Postagens Recentes</h2>
+  <div class="container">
+    <h2 class="text-center">Postagens Recentes</h2>
 
     <!-- LISTA DE POSTAGENS -->
     <ul class="list-group">
