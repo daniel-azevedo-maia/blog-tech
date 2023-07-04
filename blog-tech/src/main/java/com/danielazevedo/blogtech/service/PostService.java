@@ -8,7 +8,9 @@ import com.danielazevedo.blogtech.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Service
@@ -22,7 +24,7 @@ public class PostService {
 
     // Cadastrar publicação:
 
-    public Post cadastrarPost(PostDTO postDTO) {
+    public Post cadastrarPost(PostDTO postDTO) throws IOException {
 
         String nomeUsuario = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -41,6 +43,9 @@ public class PostService {
         post.setCategoria(postDTO.getCategoria());
         post.setTextoPrincipal(postDTO.getTextoPrincipal());
         post.setDataPublicacao(LocalDateTime.now());
+        post.setImagemPost(postDTO.getImagemPost().getBytes());
+        post.setNomeFile(postDTO.getImagemPost().getName());
+        post.setTipoFile(postDTO.getImagemPost().getContentType());
 
         return postRepository.save(post);
 

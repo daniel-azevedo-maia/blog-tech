@@ -61,7 +61,7 @@
 
     <h3>Nova publicação</h3>
 
-    <form action="/post/cadastrar" method="POST" th:object="${postobj}" id="formpost">
+    <form action="/post/cadastrar" method="POST" th:object="${postobj}" id="formpost" enctype="multipart/form-data">
 
       <div class="form-group">
         <label for="autor">Autor da publicação:</label>
@@ -94,6 +94,12 @@
           <option value="Programação/desenvolvimento">Programação/desenvolvimento</option>
           <option value="Tecnologias emergentes">Tecnologias emergentes</option>
         </select>
+      </div>
+
+      <div class="form-group">
+        <label for="imagem">Escolha uma imagem para a sua publicação</label>
+        <br>
+        <input type="file" id="imagem" name="imagemPost" >
       </div>
   
       <div class="form-group">

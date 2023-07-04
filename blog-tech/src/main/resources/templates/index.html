@@ -159,7 +159,7 @@
         <!-- Cada item da lista representa uma postagem -->
         <li th:each="post : ${postagens}" class="list-group-item">
             <div class="media">
-                <img src="path/to/image" class="mr-3 align-self-start rounded" alt="...">
+                <img th:src="@{'/post/imagem/' + ${post.id}}" class="mr-3 align-self-start rounded" alt="...">
                 <div class="media-body">
                     <h5 th:text="${post.titulo}" class="mt-0"></h5>
                     Resumo da postagem... <a href="link/to/post">Leia mais</a>

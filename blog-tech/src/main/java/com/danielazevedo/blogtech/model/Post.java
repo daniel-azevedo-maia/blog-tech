@@ -39,6 +39,12 @@ public class Post implements Serializable {
     private String categoria;
 
     @Lob
+    private byte[] imagemPost;
+
+    private String nomeFile;
+    private String tipoFile;
+
+    @Lob
     @Column(name = "textoPrincipal", nullable = false)
     private String textoPrincipal;
 
