@@ -27,7 +27,6 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/").permitAll()
                 .antMatchers(HttpMethod.GET, "/usuario/novo").permitAll()
                 .antMatchers(HttpMethod.POST, "/usuario/cadastrar").permitAll()
-//                .antMatchers(HttpMethod.GET, "/novapostagem").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin().permitAll()
@@ -50,7 +49,7 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/favicon.ico");
+        web.ignoring().antMatchers("/favicon.ico", "/css/**");
     }
 
 }

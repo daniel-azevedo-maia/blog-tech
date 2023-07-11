@@ -69,7 +69,7 @@
 
 </nav>
 
-<form th:action="@{/login}" method="POST">
+<form id="formlogin" th:action="@{/login}" method="POST">
 
     <div th:if="${usuarioCadastrado != null}">
         <p th:text="'Está quase lá, ' + ${usuarioCadastrado} + '! Agora, você só precisa fazer o login.'"></p>
