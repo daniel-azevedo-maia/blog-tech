@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -49,10 +50,7 @@ public class Post implements Serializable {
     private String textoPrincipal;
 
     @Column(name = "data_publicacao")
-    private Timestamp dataPublicacao;
-
-    public void setDataPublicacao(LocalDateTime dataPublicacao) {
-        this.dataPublicacao = Timestamp.valueOf(dataPublicacao);
-    }
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+    private LocalDateTime dataPublicacao;
 
 }
