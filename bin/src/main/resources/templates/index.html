@@ -87,8 +87,7 @@
                 <img th:src="@{'/post/imagem/' + ${post.id}}" class="mr-3 align-self-start rounded" alt="...">
                 <div class="media-body">
                     <h5 th:text="${post.titulo}" class="mt-0"></h5>
-                    Resumo da postagem... 
-                    <a th:href="@{'/post/' + ${post.id}}">Leia mais</a>
+                    Resumo da postagem... <a href="link/to/post">Leia mais</a>
                     <div class="mt-2">
                         <small th:text="'Publicado em: ' + ${#temporals.format(post.dataPublicacao, 'dd/MM/yyyy HH:mm')}" class="text-muted"></small>
                     </div>

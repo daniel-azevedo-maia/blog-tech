@@ -1,17 +1,18 @@
 package com.danielazevedo.blogtech.service;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
 import com.danielazevedo.blogtech.dto.PostDTO;
+import com.danielazevedo.blogtech.dto.response.PostResponseDTO;
 import com.danielazevedo.blogtech.model.Post;
 import com.danielazevedo.blogtech.model.Usuario;
 import com.danielazevedo.blogtech.repository.PostRepository;
 import com.danielazevedo.blogtech.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.time.LocalDateTime;
 
 @Service
 public class PostService {
@@ -49,6 +50,25 @@ public class PostService {
 
         return postRepository.save(post);
 
+    }
+    
+    public PostResponseDTO buscarPost(Long id) {
+    	
+    	Post post = postRepository.findById(id).orElse(new Post());
+    	
+    	// Converter para PostResponseDTO:
+    	PostResponseDTO postResponseDTO = new PostResponseDTO(
+    			post.getId(),
+    			post.getUsuario(),
+    			post.getTitulo(),
+    			post.getSubtitulo(),
+    			post.getImagemPost(),
+    			post.getTextoPrincipal()
+    			);
+    	
+    	return postResponseDTO;
+    	
+    	
     }
 
 }

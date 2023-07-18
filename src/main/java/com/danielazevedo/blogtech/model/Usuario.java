@@ -1,17 +1,33 @@
 package com.danielazevedo.blogtech.model;
 
-import com.danielazevedo.blogtech.dto.request.UsuarioRequestDTO;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.danielazevedo.blogtech.dto.request.UsuarioRequestDTO;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -60,6 +76,9 @@ public class Usuario implements Serializable, UserDetails {
 
     @OneToMany(mappedBy = "usuario")
     private List<Post> postagens = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "autor")
+    private List<Comentario> comentarios = new ArrayList<Comentario>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
