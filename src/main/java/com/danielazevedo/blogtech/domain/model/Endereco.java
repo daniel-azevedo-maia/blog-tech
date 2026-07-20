@@ -1,48 +1,71 @@
 package com.danielazevedo.blogtech.domain.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
-import javax.persistence.Embeddable;
-import javax.validation.constraints.NotBlank;
-
-@Getter
-@Setter
-@NoArgsConstructor
 @Embeddable
 public class Endereco {
 
-    @NotBlank(message = "O CEP é obrigatório.")
+    @Column(name = "endereco_cep", length = 9)
     private String cep;
 
-    @NotBlank(message = "O logradouro é obrigatório.")
+    @Column(name = "endereco_logradouro")
     private String logradouro;
 
-    @NotBlank(message = "O bairro é obrigatório.")
-    private String bairro;
-
-    @NotBlank(message = "A cidade é obrigatória.")
-    private String cidade;
-
-    @NotBlank(message = "O estado (UF) é obrigatório.")
-    private String uf;
-
-    private String complemento;
-
-    @NotBlank(message = "O número é obrigatório.")
+    @Column(name = "endereco_numero", length = 20)
     private String numero;
 
-    @Override
-    public String toString() {
-        return "Endereco{" +
-                "cep='" + cep + '\'' +
-                ", logradouro='" + logradouro + '\'' +
-                ", bairro='" + bairro + '\'' +
-                ", cidade='" + cidade + '\'' +
-                ", uf='" + uf + '\'' +
-                ", complemento='" + complemento + '\'' +
-                ", numero='" + numero + '\'' +
-                '}';
+    @Column(name = "endereco_complemento")
+    private String complemento;
+
+    @Column(name = "endereco_bairro")
+    private String bairro;
+
+    @Column(name = "endereco_cidade")
+    private String cidade;
+
+    @Column(name = "endereco_uf", length = 2)
+    private String uf;
+
+    public Endereco() {
+    }
+
+    public Endereco(String cep, String logradouro, String numero, String complemento,
+                    String bairro, String cidade, String uf) {
+        this.cep = cep;
+        this.logradouro = logradouro;
+        this.numero = numero;
+        this.complemento = complemento;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.uf = uf;
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public String getLogradouro() {
+        return logradouro;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public String getComplemento() {
+        return complemento;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public String getUf() {
+        return uf;
     }
 }

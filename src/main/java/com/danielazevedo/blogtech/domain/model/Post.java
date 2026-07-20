@@ -1,77 +1,118 @@
 package com.danielazevedo.blogtech.domain.model;
 
-import java.io.Serializable;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Getter
-@Setter
-@NoArgsConstructor
 @Entity
 @Table(name = "post")
-public class Post implements Serializable {
+public class Post {
 
-	private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
-	private Long id;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
 
-	@NotNull(message = "O autor do post é obrigatório.")
-	@ManyToOne
-	@JoinColumn(name = "usuario_id", nullable = false)
-	private Usuario usuario;
+    @Column(nullable = false, length = 180)
+    private String titulo;
 
-	@NotBlank(message = "O título é obrigatório.")
-	@Column(nullable = false)
-	private String titulo;
+    @Column(nullable = false, length = 300)
+    private String subtitulo;
 
-	@NotBlank(message = "O subtítulo é obrigatório.")
-	@Column(nullable = false)
-	private String subtitulo;
+    @Column(nullable = false, length = 100)
+    private String categoria;
 
-	@NotBlank(message = "A categoria é obrigatória.")
-	@Column(nullable = false)
-	private String categoria;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "imagem_post")
+    private byte[] imagemPost;
 
-	@Lob
-	private byte[] imagemPost;
+    @Column(name = "nome_file")
+    private String nomeFile;
 
-	private String nomeFile;
+    @Column(name = "tipo_file", length = 100)
+    private String tipoFile;
 
-	private String tipoFile;
+    @Lob
+    @Column(name = "textoPrincipal", nullable = false)
+    private String textoPrincipal;
 
-	@NotBlank(message = "O texto principal é obrigatório.")
-	@Lob
-	@Column(name = "textoPrincipal", nullable = false)
-	private String textoPrincipal;
+    @Column(name = "data_hora_publicacao", nullable = false)
+    private LocalDateTime dataPublicacao;
 
-	@NotNull(message = "A data de publicação é obrigatória.")
-	@Column(name = "data_hora_publicacao", nullable = false)
-	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
-	private LocalDateTime dataPublicacao;
+    public Post() {
+    }
 
-	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Comentario> comentarios = new ArrayList<>();
+    public Post(Usuario usuario, String titulo, String subtitulo, String categoria,
+                String textoPrincipal, LocalDateTime dataPublicacao) {
+        this.usuario = usuario;
+        this.titulo = titulo;
+        this.subtitulo = subtitulo;
+        this.categoria = categoria;
+        this.textoPrincipal = textoPrincipal;
+        this.dataPublicacao = dataPublicacao;
+    }
 
-	public void adicionarComentario(Comentario comentario) {
-		comentario.setPost(this);
-		comentarios.add(comentario);
-	}
+    public void definirImagem(byte[] conteudo, String nomeArquivo, String tipoArquivo) {
+        this.imagemPost = conteudo;
+        this.nomeFile = nomeArquivo;
+        this.tipoFile = tipoArquivo;
+    }
 
-	public void removerComentario(Comentario comentario) {
-		comentarios.remove(comentario);
-	}
+    public boolean possuiImagem() {
+        return imagemPost != null && imagemPost.length > 0 && tipoFile != null;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public String getSubtitulo() {
+        return subtitulo;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public byte[] getImagemPost() {
+        return imagemPost;
+    }
+
+    public String getNomeFile() {
+        return nomeFile;
+    }
+
+    public String getTipoFile() {
+        return tipoFile;
+    }
+
+    public String getTextoPrincipal() {
+        return textoPrincipal;
+    }
+
+    public LocalDateTime getDataPublicacao() {
+        return dataPublicacao;
+    }
 }

@@ -1,50 +1,62 @@
 package com.danielazevedo.blogtech.application.controller;
 
 import com.danielazevedo.blogtech.application.dto.request.UsuarioRequestDTO;
-import com.danielazevedo.blogtech.application.dto.response.UsuarioResponseDTO;
+import com.danielazevedo.blogtech.application.exception.RegraDeNegocioException;
 import com.danielazevedo.blogtech.application.service.UsuarioService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequiredArgsConstructor
 @RequestMapping("/usuario")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
+
     @GetMapping("/novo")
     public ModelAndView novoUsuario() {
-        ModelAndView modelAndView = new ModelAndView("/novousuario");
-        modelAndView.addObject("usuarioobj", new UsuarioRequestDTO());
-        return modelAndView;
+        return formulario(new UsuarioRequestDTO());
     }
 
     @PostMapping("/cadastrar")
-    public ModelAndView cadastrarUsuario(@ModelAttribute UsuarioRequestDTO usuarioRequestDTO) {
-        if (usuarioService.verificarExistenciaLogin(usuarioRequestDTO.getLogin())) {
-            return retornarErroCadastroUsuario("Este login já existe! Informe outro.");
+    public ModelAndView cadastrarUsuario(
+            @Valid @ModelAttribute("usuarioobj") UsuarioRequestDTO request,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes
+    ) {
+        if (bindingResult.hasErrors()) {
+            return formulario(request);
         }
 
-        usuarioService.cadastrarUsuario(usuarioRequestDTO);
-        return new ModelAndView("login").addObject("usuarioCadastrado", usuarioRequestDTO.getNome());
+        try {
+            usuarioService.cadastrarUsuario(request);
+        } catch (RegraDeNegocioException exception) {
+            bindingResult.reject("cadastro.invalido", exception.getMessage());
+            return formulario(request);
+        }
+
+        redirectAttributes.addFlashAttribute("usuarioCadastrado", request.getNome().trim());
+        return new ModelAndView("redirect:/login");
     }
 
     @GetMapping("/listar")
     public ModelAndView listarUsuarios() {
-        List<UsuarioResponseDTO> usuarios = usuarioService.listarTodosUsuarios();
-        return new ModelAndView("listausuarios").addObject("usuarios", usuarios);
+        return new ModelAndView("listausuarios")
+                .addObject("usuarios", usuarioService.listarTodosUsuarios());
     }
 
-    private ModelAndView retornarErroCadastroUsuario(String mensagemErro) {
-        ModelAndView modelAndView = new ModelAndView("/novousuario");
-        modelAndView.addObject("usuarioobj", new UsuarioRequestDTO());
-        modelAndView.addObject("loginExistente", mensagemErro);
-        return modelAndView;
+    private ModelAndView formulario(UsuarioRequestDTO request) {
+        return new ModelAndView("novousuario")
+                .addObject("usuarioobj", request);
     }
 }

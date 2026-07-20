@@ -1,79 +1,141 @@
 package com.danielazevedo.blogtech.application.service;
 
+import com.danielazevedo.blogtech.application.dto.request.EnderecoRequestDTO;
 import com.danielazevedo.blogtech.application.dto.request.UsuarioRequestDTO;
 import com.danielazevedo.blogtech.application.dto.response.UsuarioResponseDTO;
+import com.danielazevedo.blogtech.application.exception.RecursoNaoEncontradoException;
+import com.danielazevedo.blogtech.application.exception.RegraDeNegocioException;
+import com.danielazevedo.blogtech.domain.model.Endereco;
 import com.danielazevedo.blogtech.domain.model.Role;
 import com.danielazevedo.blogtech.domain.model.Usuario;
 import com.danielazevedo.blogtech.domain.repository.RoleRepository;
 import com.danielazevedo.blogtech.domain.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Locale;
 
 @Service
 public class UsuarioService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private RoleRepository roleRepository;
-
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    public Usuario cadastrarUsuario(UsuarioRequestDTO usuarioRequestDTO) {
-        Usuario usuario = new Usuario(usuarioRequestDTO);
-        usuario.setSenha(criptografarSenha(usuario.getSenha()));
-        usuario.getRoles().add(obterRolePadrao());
-        return usuarioRepository.save(usuario);
+    public UsuarioService(UsuarioRepository usuarioRepository,
+                          RoleRepository roleRepository,
+                          PasswordEncoder passwordEncoder) {
+        this.usuarioRepository = usuarioRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public Usuario obterUsuarioAutenticado() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            String login = authentication.getName();
-            return usuarioRepository.findUserByLogin(login)
-                    .orElseThrow(() -> new IllegalStateException("Usuário não encontrado!"));
+    @Transactional
+    public UsuarioResponseDTO cadastrarUsuario(UsuarioRequestDTO request) {
+        validarCadastro(request);
+
+        Endereco endereco = converterEndereco(request.getEndereco());
+        Usuario usuario = new Usuario(
+                limpar(request.getNome()),
+                limpar(request.getSobrenome()),
+                normalizarEmail(request.getEmail()),
+                normalizarLogin(request.getLogin()),
+                passwordEncoder.encode(request.getSenha()),
+                endereco
+        );
+        usuario.adicionarRole(obterRolePadrao());
+
+        try {
+            return converter(usuarioRepository.save(usuario));
+        } catch (DataIntegrityViolationException exception) {
+            throw new RegraDeNegocioException("Já existe um usuário com esse login ou e-mail.");
         }
-        throw new IllegalStateException("Usuário não autenticado!");
     }
 
+    @Transactional(readOnly = true)
+    public Usuario buscarPorLogin(String login) {
+        return usuarioRepository.findByLoginIgnoreCase(normalizarLogin(login))
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado."));
+    }
 
+    @Transactional(readOnly = true)
     public List<UsuarioResponseDTO> listarTodosUsuarios() {
-        return usuarioRepository.findAll().stream()
-                .map(UsuarioResponseDTO::new)
-                .collect(Collectors.toList());
+        return usuarioRepository.findAllByOrderByNomeAscSobrenomeAsc()
+                .stream()
+                .map(this::converter)
+                .toList();
     }
 
-    public boolean verificarExistenciaLogin(String login) {
-        return usuarioRepository.existsByLogin(login);
-    }
-
+    @Transactional(readOnly = true)
     public String buscarNomePorLogin(String login) {
-        return usuarioRepository.findNomeByLogin(login)
-                .orElseThrow(() -> new IllegalArgumentException("Nome não encontrado para o login fornecido!"));
+        return buscarPorLogin(login).getNome();
     }
 
-    public String obterNomeUsuarioAutenticado() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            String login = authentication.getName();
-            return buscarNomePorLogin(login);
+    @Transactional(readOnly = true)
+    public boolean loginJaExiste(String login) {
+        return login != null && usuarioRepository.existsByLoginIgnoreCase(normalizarLogin(login));
+    }
+
+    @Transactional(readOnly = true)
+    public boolean emailJaExiste(String email) {
+        return email != null && usuarioRepository.existsByEmailIgnoreCase(normalizarEmail(email));
+    }
+
+    private void validarCadastro(UsuarioRequestDTO request) {
+        if (!request.getSenha().equals(request.getConfirmarSenha())) {
+            throw new RegraDeNegocioException("A confirmação da senha não confere.");
         }
-        throw new IllegalStateException("Usuário não autenticado!");
+        if (loginJaExiste(request.getLogin())) {
+            throw new RegraDeNegocioException("Este login já está em uso.");
+        }
+        if (emailJaExiste(request.getEmail())) {
+            throw new RegraDeNegocioException("Este e-mail já está cadastrado.");
+        }
     }
 
     private Role obterRolePadrao() {
-        return roleRepository.findByNomeRole("USER")
-                .orElseThrow(() -> new IllegalStateException("Role USER não encontrada!"));
+        return roleRepository.findByNomeRole(Role.ROLE_USER)
+                .orElseGet(() -> roleRepository.save(new Role(Role.ROLE_USER)));
     }
 
-    private String criptografarSenha(String senha) {
-        return passwordEncoder.encode(senha);
+    private Endereco converterEndereco(EnderecoRequestDTO endereco) {
+        return new Endereco(
+                limpar(endereco.getCep()),
+                limpar(endereco.getLogradouro()),
+                limpar(endereco.getNumero()),
+                limparOpcional(endereco.getComplemento()),
+                limpar(endereco.getBairro()),
+                limpar(endereco.getCidade()),
+                limpar(endereco.getUf()).toUpperCase(Locale.ROOT)
+        );
+    }
+
+    private UsuarioResponseDTO converter(Usuario usuario) {
+        return new UsuarioResponseDTO(
+                usuario.getId(),
+                usuario.getNome() + " " + usuario.getSobrenome(),
+                usuario.getEmail(),
+                usuario.getLogin()
+        );
+    }
+
+    private String normalizarLogin(String login) {
+        return limpar(login).toLowerCase(Locale.ROOT);
+    }
+
+    private String normalizarEmail(String email) {
+        return limpar(email).toLowerCase(Locale.ROOT);
+    }
+
+    private String limpar(String valor) {
+        return valor == null ? "" : valor.trim();
+    }
+
+    private String limparOpcional(String valor) {
+        String texto = limpar(valor);
+        return texto.isBlank() ? null : texto;
     }
 }

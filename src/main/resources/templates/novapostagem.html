@@ -1,91 +1,64 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Blog Tech - Nova Postagem</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nova publicação | Blog Tech</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+<main class="page narrow">
+    <section class="form-card">
+        <span class="eyebrow">Escrever</span>
+        <h1>Nova publicação</h1>
+        <p>Autor: <strong th:text="${autor}">Autor</strong></p>
 
-  <div class="collapse navbar-collapse" id="navbarMenu">
-    <a class="navbar-brand" href="#">BLOG TECH</a>
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active"><a class="nav-link" href="/index.html">Página inicial</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">Artigos</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">Vídeos</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">Downloads</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">Quem somos</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
-    </ul>
-    <form class="form-inline">
-      <input class="form-control mr-sm-2" type="search" placeholder="Pesquisar" aria-label="Search">
-      <button class="btn btn-outline-success" type="submit">Pesquisar</button>
-    </form>
-  </div>
-</nav>
+        <form th:action="@{/post/cadastrar}" th:object="${postobj}" method="post"
+              enctype="multipart/form-data" class="stack-form">
+            <div class="alert error" th:if="${#fields.hasGlobalErrors()}" th:each="erro : ${#fields.globalErrors()}" th:text="${erro}"></div>
 
-<div class="container mt-4">
-  <h3>Nova publicação</h3>
+            <label for="titulo">Título</label>
+            <input id="titulo" type="text" th:field="*{titulo}">
+            <small class="field-error" th:errors="*{titulo}"></small>
 
-  <form action="/post/cadastrar" method="POST" th:object="${postobj}" id="formpost" enctype="multipart/form-data">
-    <div class="form-group">
-      <label for="autor">Autor da publicação:</label>
-      <input id="autor" name="autor" type="text" th:value="${autor.nome}" readonly="readonly" style="background-color: #f8f9fa; cursor: not-allowed; text-align: center;" />
-    </div>
+            <label for="subtitulo">Subtítulo</label>
+            <input id="subtitulo" type="text" th:field="*{subtitulo}">
+            <small class="field-error" th:errors="*{subtitulo}"></small>
 
-    <div class="form-group">
-      <label for="titulo">Título da publicação</label>
-      <input type="text" th:field="*{titulo}" class="form-control" id="titulo" placeholder="">
-    </div>
+            <label for="categoria">Categoria</label>
+            <select id="categoria" th:field="*{categoria}">
+                <option value="">Escolha uma categoria</option>
+                <option value="Big Data e Análise de Dados">Big Data e Análise de Dados</option>
+                <option value="Blockchain e Criptomoedas">Blockchain e Criptomoedas</option>
+                <option value="Cibersegurança">Cibersegurança</option>
+                <option value="Computação em Nuvem">Computação em Nuvem</option>
+                <option value="DevOps">DevOps</option>
+                <option value="Games e Entretenimento">Games e Entretenimento</option>
+                <option value="Hardware">Hardware</option>
+                <option value="Internet das Coisas">Internet das Coisas</option>
+                <option value="Inteligência Artificial e Machine Learning">Inteligência Artificial e Machine Learning</option>
+                <option value="Programação e Desenvolvimento">Programação e Desenvolvimento</option>
+                <option value="Tecnologias Emergentes">Tecnologias Emergentes</option>
+            </select>
+            <small class="field-error" th:errors="*{categoria}"></small>
 
-    <div class="form-group">
-      <label for="subtitulo">Subtítulo da publicação</label>
-      <input type="text" th:field="*{subtitulo}" class="form-control" id="subtitulo" placeholder="">
-    </div>
+            <label for="imagemPost">Imagem de capa <span class="optional">(opcional)</span></label>
+            <input id="imagemPost" type="file" th:field="*{imagemPost}" accept="image/jpeg,image/png,image/webp,image/gif">
+            <small class="help-text">JPG, PNG, WEBP ou GIF, até 10 MB.</small>
+            <small class="field-error" th:errors="*{imagemPost}"></small>
 
-    <div class="form-group">
-      <label for="categoria">Selecione a categoria com a qual sua publicação mais se identifica</label>
-      <select th:field="*{categoria}" class="form-control" id="categoria">
-        <option value="" selected>Escolha a opção</option>
-        <option value="Big Data e Análise de Dados">Big Data e Análise de Dados</option>
-        <option value="Blockchain e criptomoedas">Blockchain e criptomoedas</option>
-        <option value="Cibersegurança">Cibersegurança</option>
-        <option value="Computação em nuvem">Computação em nuvem</option>
-        <option value="DevOps">DevOps</option>
-        <option value="Games e Entretenimento">Games e Entretenimento</option>
-        <option value="Hardware">Hardware</option>
-        <option value="Internet das Coisas">Internet das Coisas</option>
-        <option value="Inteligência Artificial e Machine Learning">Inteligência Artificial e Machine Learning</option>
-        <option value="Programação/desenvolvimento">Programação/desenvolvimento</option>
-        <option value="Tecnologias emergentes">Tecnologias emergentes</option>
-      </select>
-    </div>
+            <label for="textoPrincipal">Conteúdo</label>
+            <textarea id="textoPrincipal" th:field="*{textoPrincipal}" rows="14"></textarea>
+            <small class="field-error" th:errors="*{textoPrincipal}"></small>
 
-    <div class="form-group">
-      <label for="imagem">Escolha uma imagem para a sua publicação</label>
-      <input type="file" id="imagem" name="imagemPost" class="form-control-file">
-    </div>
-
-    <div class="form-group">
-      <label for="textopublicacao">Escreva aqui o seu texto</label>
-      <textarea th:field="*{textoPrincipal}" class="form-control" id="textopublicacao" rows="8"></textarea>
-    </div>
-
-    <div class="form-group">
-      <button type="submit" class="btn btn-success">Publicar</button>
-      <a th:href="@{/}" class="btn btn-primary">Voltar</a>
-    </div>
-  </form>
-</div>
-
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
+            <div class="form-actions">
+                <a class="button secondary" th:href="@{/}">Cancelar</a>
+                <button class="button primary" type="submit">Publicar</button>
+            </div>
+        </form>
+    </section>
+</main>
 </body>
 </html>

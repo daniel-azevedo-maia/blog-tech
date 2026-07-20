@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Conteúdo não encontrado | Blog Tech</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<main class="auth-page">
+    <section class="form-card compact center">
+        <span class="error-code">404</span>
+        <h1>Conteúdo não encontrado</h1>
+        <p th:text="${mensagem}">O recurso solicitado não existe.</p>
+        <a class="button primary" th:href="@{/}">Voltar ao início</a>
+    </section>
+</main>
+</body>
+</html>

@@ -1,27 +1,95 @@
-# blog-tech
+# Blog Tech
 
-BlogTech é uma aplicação web baseada em Java Spring Boot que fornece um sistema básico de blog com autenticação de usuário. A aplicação permite que os usuários se registrem, façam login e criem novas postagens de blog.
+A web-based blog application developed with Java 17 and Spring Boot. Users can create an account, sign in, publish articles with an optional image, and browse all published posts.
 
-Tecnologias Utilizadas:
--Java
--Spring Boot
--Spring Security
--Thymeleaf (Template Engine)
--PostgreSQL (Banco de dados)
+## Features
 
-Funcionalidades:
+* User registration with validation and BCrypt password encryption
+* Secure authentication and logout with Spring Security
+* Post creation with an optional image
+* Public pages for browsing and reading posts
+* Ready-to-use local persistence with H2
+* PostgreSQL profile for production-like environments
+* Context, security, user, and post tests
+* Dockerfile, Docker Compose, and CI pipeline
 
--Cadastro de Usuário: Permite que os usuários se registrem fornecendo informações básicas como nome, sobrenome, e-mail, login e senha.
--Criação de Postagem: Após o login, os usuários podem criar novas postagens no blog. Eles podem adicionar um título, subtítulo, categoria e o texto principal para a postagem.
+## Technologies
 
-Estrutura do Código:
-A estrutura do código é baseada no padrão MVC (Model-View-Controller) e é composta por várias partes principais:
-Modelos: As classes Post, Usuario e Role representam as entidades principais no sistema e são mapeadas para tabelas correspondentes no banco de dados.
-Repositórios: PostRepository e UsuarioRepository são interfaces que estendem JpaRepository para fornecer operações CRUD básicas para as entidades Post e Usuario.
-Serviços: PostService e UsuarioService contêm a lógica de negócios principal e interagem com os repositórios para persistir dados.
-Controladores: PostController e UsuarioController gerenciam a interação do usuário, tratam solicitações HTTP e retornam respostas. Eles utilizam os serviços para realizar ações como criar uma nova postagem ou registrar um novo usuário.
+* Java 17
+* Spring Boot 3.5
+* Spring MVC, Data JPA, Security, and Validation
+* Thymeleaf
+* H2 and PostgreSQL
+* Maven
+* JUnit 5 and MockMvc
 
-Configuração e Uso
--Para executar a aplicação, você precisa ter um ambiente de desenvolvimento Java configurado com acesso a um banco de dados PostgreSQL.
--Depois de clonar o repositório, você pode importar o projeto em seu IDE favorito e executá-lo a partir daí. A aplicação está configurada para iniciar na porta 8080, então você pode acessar a interface do usuário indo para http://localhost:8080 em seu navegador.
--Para adicionar novos usuários ou postagens, você pode usar os endpoints /usuario/novo e /post/novo, respectivamente.
+## Running Locally
+
+Requirement: JDK 17 or later.
+
+Linux/macOS:
+
+```bash
+./mvnw spring-boot:run
+```
+
+Windows PowerShell:
+
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+
+The application will be available at `http://localhost:8080`.
+
+By default, it uses an H2 database persisted in the `./data` directory. No external database installation is required to get started.
+
+## Running the Tests
+
+```bash
+./mvnw clean verify
+```
+
+## Running with PostgreSQL
+
+Create a database named `blogtech` and run:
+
+```bash
+export SPRING_PROFILES_ACTIVE=postgres
+export DB_URL=jdbc:postgresql://localhost:5432/blogtech
+export DB_USER=postgres
+export DB_PASSWORD=postgres
+./mvnw spring-boot:run
+```
+
+## Running with Docker Compose
+
+```bash
+docker compose up --build
+```
+
+Docker Compose starts the application and a PostgreSQL database that is configured automatically.
+
+## Project Structure
+
+```text
+src/main/java/com/danielazevedo/blogtech
+├── application
+│   ├── controller
+│   ├── dto
+│   ├── exception
+│   └── service
+├── domain
+│   ├── model
+│   └── repository
+└── infrastructure
+    ├── config
+    └── security
+```
+
+## Security
+
+* Passwords are never stored as plain text.
+* CSRF protection remains enabled.
+* Registration, login, and post reading are publicly accessible.
+* Post creation and user listing require authentication.
+* Logout is performed through a POST request.

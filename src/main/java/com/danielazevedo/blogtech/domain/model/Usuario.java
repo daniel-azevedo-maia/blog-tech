@@ -1,14 +1,20 @@
 package com.danielazevedo.blogtech.domain.model;
 
-import com.danielazevedo.blogtech.application.dto.request.UsuarioRequestDTO;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,61 +22,95 @@ import java.util.List;
 
 @Entity
 @Table(name = "usuario")
-@Getter @Setter
 public class Usuario implements UserDetails, Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
-    @NotBlank(message = "O nome é obrigatório.")
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String nome;
 
-    @NotBlank(message = "O sobrenome é obrigatório.")
-    @Column(nullable = false)
+    @Column(nullable = false, length = 150)
     private String sobrenome;
 
-    @NotBlank(message = "O e-mail é obrigatório.")
-    @Email(message = "E-mail inválido.")
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 180)
     private String email;
 
-    @NotBlank(message = "O login é obrigatório.")
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 60)
     private String login;
 
-    @NotBlank(message = "A senha é obrigatória.")
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String senha;
+
+    @Embedded
+    private Endereco endereco;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "usuarios_role",
-            joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private List<Role> roles = new ArrayList<>();
 
-    // Construtor padrão
     public Usuario() {
     }
 
-    // Construtor personalizado com DTO
-    public Usuario(UsuarioRequestDTO usuarioRequestDTO) {
-        this.nome = usuarioRequestDTO.getNome();
-        this.sobrenome = usuarioRequestDTO.getSobrenome();
-        this.email = usuarioRequestDTO.getEmail();
-        this.login = usuarioRequestDTO.getLogin();
-        this.senha = usuarioRequestDTO.getSenha(); // A senha será criptografada no serviço
+    public Usuario(String nome, String sobrenome, String email, String login,
+                   String senha, Endereco endereco) {
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+        this.email = email;
+        this.login = login;
+        this.senha = senha;
+        this.endereco = endereco;
+    }
+
+    public void adicionarRole(Role role) {
+        if (!roles.contains(role)) {
+            roles.add(role);
+        }
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getSobrenome() {
+        return sobrenome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public List<Role> getRoles() {
+        return List.copyOf(roles);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return (Collection<? extends GrantedAuthority>) roles;
+        return List.copyOf(roles);
     }
 
     @Override
